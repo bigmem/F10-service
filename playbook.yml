@@ -1,0 +1,21 @@
+---
+- hosts: whensea
+  remote_user: root
+  tasks:
+    - name: Remove Container
+      docker_container:
+        name: f10
+        state: absent
+    - name: Create Container
+      docker_container:
+        name: f10
+        image: "baocang/f10:0.0.2"
+        state: started
+        ports:
+          - "9301:3000"
+#        links:
+#          - "mysql:mysql_host"
+#        env:
+#          MYSQL_HOST: "mysql_host"
+#          MYSQL_PWD: "P@ssw0rd"
+#          MYSQL_DB_NAME: "f10"

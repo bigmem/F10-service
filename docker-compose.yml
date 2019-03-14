@@ -1,0 +1,47 @@
+version: '2.1'
+services:
+  nginx:
+    image: nginx:1.15.9
+    restart: always
+    ports:
+      - 9020:80
+      - 9021:8080
+      - 9443:443
+    networks:
+      f10:
+        ipv4_address: 192.168.5.102
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d:ro
+  f109030:
+    image: baocang/f10:0.0.1
+    build: .
+    restart: always
+    environment:
+      NODE_ENV: production
+    ports:
+      - 9030:3000
+    networks:
+      f10:
+        ipv4_address: 192.168.5.103
+    depends_on:
+      - nginx
+  f109040:
+    image: baocang/f10:0.0.1
+    build: .
+    restart: always
+    environment:
+      NODE_ENV: production
+    ports:
+      - 9040:3000
+    networks:
+      f10:
+        ipv4_address: 192.168.5.104
+    depends_on:
+      - nginx
+networks:
+  f10:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.5.0/24
